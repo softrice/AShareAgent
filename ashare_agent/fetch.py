@@ -740,7 +740,12 @@ def _clip_json(obj: Any, limit: int = 12000) -> str:
 
 
 def build_context_markdown(payload: Dict[str, Any]) -> str:
-    from .roles import REPORT_SECTIONS, SYSTEM_RULES, TARGET_PRICE_RULES
+    from .roles import (
+        ATTRIBUTION_RULES,
+        REPORT_SECTIONS,
+        SYSTEM_RULES,
+        TARGET_PRICE_RULES,
+    )
     from .decision import DECISION_RULES, decision_block_example
 
     b = payload.get("basic") or {}
@@ -904,6 +909,8 @@ def build_context_markdown(payload: Dict[str, Any]) -> str:
             "## Cursor 分析指令",
             SYSTEM_RULES,
             "",
+            ATTRIBUTION_RULES,
+            "",
             TARGET_PRICE_RULES,
             "",
             DECISION_RULES,
@@ -920,6 +927,7 @@ def build_context_markdown(payload: Dict[str, Any]) -> str:
         [
             "",
             "要求：有数据引用；不确定就标明「数据缺失」；不编造财报/新闻/公告数字；",
+            "异动/涨停归因须按：市场主线/板块题材 → 个股公告/业绩 → 资金交易结构 → 技术位置；",
             "技术面须引用 MA/MACD/RSI/布林/ATR/KDJ；须引用大盘/行业/股东/北向（若有）；",
             "第8节必须含目标价三情景 + 末尾 decision JSON（action 仅买入/持有/卖出）；报告末尾加免责声明。",
         ]

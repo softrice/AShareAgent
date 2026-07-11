@@ -5,7 +5,13 @@ import unittest
 
 from ashare_agent.fetch import normalize_code, market_tag, em_secid, xq_symbol
 from ashare_agent.indicators import calc_technicals
-from ashare_agent.roles import ROLES, REPORT_SECTIONS, TARGET_PRICE_RULES, report_outline
+from ashare_agent.roles import (
+    ATTRIBUTION_RULES,
+    ROLES,
+    REPORT_SECTIONS,
+    TARGET_PRICE_RULES,
+    report_outline,
+)
 from ashare_agent.decision import validate_decision, extract_decision_from_markdown, DECISION_RULES
 
 
@@ -54,6 +60,11 @@ class TestRoles(unittest.TestCase):
         self.assertTrue(any("目标价" in s for s in REPORT_SECTIONS))
         self.assertIn("三情景", TARGET_PRICE_RULES)
         self.assertIn("无法确定", TARGET_PRICE_RULES)
+        self.assertIn("市场主线", ATTRIBUTION_RULES)
+        self.assertIn("个股自身催化", ATTRIBUTION_RULES)
+        self.assertIn("资金与交易结构", ATTRIBUTION_RULES)
+        self.assertIn("技术位置", ATTRIBUTION_RULES)
+        self.assertIn("主因", ATTRIBUTION_RULES)
         self.assertIn("买入", DECISION_RULES)
         self.assertIn("持有", DECISION_RULES)
         self.assertIn("卖出", DECISION_RULES)
