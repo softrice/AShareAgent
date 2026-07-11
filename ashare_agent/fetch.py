@@ -9,6 +9,8 @@ from typing import Any, Callable, Dict, Optional
 
 import pandas as pd
 
+from .indicators import calc_technicals
+
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 REPORTS_DIR = ROOT / "reports"
@@ -40,6 +42,18 @@ def xq_symbol(code: str) -> str:
     return f"SH{code}" if code.startswith(("5", "6", "9")) else f"SZ{code}"
 
 
+def market_tag(code: str) -> str:
+    """AkShare 常用市场标记：沪 sh / 深 sz。"""
+    code = normalize_code(code)
+    return "sh" if code.startswith(("5", "6", "9")) else "sz"
+
+
+def em_secid(code: str) -> str:
+    code = normalize_code(code)
+    # 东财 secid：沪 1.xxxxxx，深 0.xxxxxx
+    return f"1.{code}" if code.startswith(("5", "6", "9")) else f"0.{code}"
+
+
 def _normalize_date_series(series: pd.Series) -> pd.Series:
     """把日期列统一成可读字符串（兼容毫秒/秒时间戳与 object dtype）。"""
     if pd.api.types.is_datetime64_any_dtype(series):
@@ -64,7 +78,7 @@ def _df_to_records(df: Optional[pd.DataFrame], limit: int = 30) -> list:
         return []
     out = df.head(limit).copy()
     for col in list(out.columns):
-        if col in ("日期", "date", "Date", "data_date", "交易日"):
+        if col in ("日期", "date", "Date", "data_date", "交易日", "公告日期", "发布时间"):
             out[col] = _normalize_date_series(out[col])
         elif pd.api.types.is_datetime64_any_dtype(out[col]):
             out[col] = out[col].astype(str)
@@ -432,41 +446,176 @@ def dumps_json(obj: Any) -> str:
     return json.dumps(_json_safe(obj), ensure_ascii=False, indent=2)
 
 
-def calc_technicals(daily: list) -> Dict[str, Any]:
-    if not daily or (isinstance(daily[0], dict) and daily[0].get("error")):
-        return {"error": "无可用日线"}
-    df = pd.DataFrame(daily)
-    # normalize column names from akshare
-    colmap = {}
-    for c in df.columns:
-        if c in ("收盘", "close", "Close"):
-            colmap[c] = "close"
-        elif c in ("开盘", "open"):
-            colmap[c] = "open"
-        elif c in ("最高", "high"):
-            colmap[c] = "high"
-        elif c in ("最低", "low"):
-            colmap[c] = "low"
-        elif c in ("成交量", "volume"):
-            colmap[c] = "volume"
-        elif c in ("日期", "date"):
-            colmap[c] = "date"
-    df = df.rename(columns=colmap)
-    if "close" not in df.columns:
-        return {"error": f"列缺失: {list(df.columns)}"}
-    close = df["close"].astype(float)
-    out: Dict[str, Any] = {
-        "last_close": float(close.iloc[-1]),
-        "ma5": float(close.tail(5).mean()) if len(close) >= 5 else None,
-        "ma20": float(close.tail(20).mean()) if len(close) >= 20 else None,
-        "ma60": float(close.tail(60).mean()) if len(close) >= 60 else None,
-        "ret_5d": float(close.iloc[-1] / close.iloc[-6] - 1) if len(close) >= 6 else None,
-        "ret_20d": float(close.iloc[-1] / close.iloc[-21] - 1) if len(close) >= 21 else None,
-        "volatility_20d": float(close.pct_change().tail(20).std() * (252 ** 0.5)) if len(close) >= 21 else None,
+def fetch_fund_flow(code: str, days: int = 20) -> Dict[str, Any]:
+    """个股资金流向。优先 AkShare，失败则尝试东财 daykline 接口。"""
+    import akshare as ak
+
+    code = normalize_code(code)
+    market = market_tag(code)
+    errors: list = []
+
+    try:
+        df = _retry(
+            lambda: ak.stock_individual_fund_flow(stock=code, market=market),
+            times=3,
+            sleep_s=1.5,
+        )
+        if df is not None and not df.empty:
+            records = _df_to_records(df.tail(days), limit=days)
+            last = records[-1] if records else {}
+            summary: Dict[str, Any] = {
+                "latest_date": last.get("日期") or last.get("date"),
+                "main_net": _num(
+                    last.get("主力净流入-净额")
+                    or last.get("主力净流入")
+                    or last.get("主力净额")
+                ),
+                "main_net_pct": _num(last.get("主力净流入-净占比")),
+                "super_net": _num(last.get("超大单净流入-净额")),
+                "big_net": _num(last.get("大单净流入-净额")),
+                "mid_net": _num(last.get("中单净流入-净额")),
+                "small_net": _num(last.get("小单净流入-净额")),
+            }
+            main_col = None
+            for c in ("主力净流入-净额", "主力净流入", "主力净额"):
+                if c in df.columns:
+                    main_col = c
+                    break
+            if main_col:
+                try:
+                    summary["main_net_sum_period"] = float(
+                        pd.to_numeric(df.tail(days)[main_col], errors="coerce").sum()
+                    )
+                    summary["period_days"] = min(days, len(df))
+                except Exception:
+                    pass
+            return {
+                "source": "akshare_individual_fund_flow",
+                "summary": summary,
+                "recent": records,
+            }
+    except Exception as e:
+        errors.append(f"ak_fund_flow: {e}")
+
+    try:
+        from curl_cffi import requests as cffi_requests
+
+        url = "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get"
+        params = {
+            "lmt": "0",
+            "klt": "101",
+            "fields1": "f1,f2,f3,f7",
+            "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63,f64,f65",
+            "secid": em_secid(code),
+            "ut": "b2884a393a59ad64002292a3e90d522a",
+        }
+        headers = {
+            "Referer": "https://data.eastmoney.com/zjlx/",
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            ),
+        }
+        r = cffi_requests.get(
+            url, params=params, headers=headers, impersonate="chrome120", timeout=20
+        )
+        payload = r.json()
+        klines = ((payload.get("data") or {}).get("klines")) or []
+        if klines:
+            rows = []
+            for line in klines[-days:]:
+                parts = str(line).split(",")
+                if len(parts) < 6:
+                    continue
+                rows.append(
+                    {
+                        "日期": parts[0],
+                        "主力净流入-净额": _num(parts[1]),
+                        "小单净流入-净额": _num(parts[2]),
+                        "中单净流入-净额": _num(parts[3]),
+                        "大单净流入-净额": _num(parts[4]),
+                        "超大单净流入-净额": _num(parts[5]),
+                    }
+                )
+            if rows:
+                last = rows[-1]
+                summary = {
+                    "latest_date": last.get("日期"),
+                    "main_net": last.get("主力净流入-净额"),
+                    "super_net": last.get("超大单净流入-净额"),
+                    "big_net": last.get("大单净流入-净额"),
+                    "mid_net": last.get("中单净流入-净额"),
+                    "small_net": last.get("小单净流入-净额"),
+                    "main_net_sum_period": sum(
+                        (x.get("主力净流入-净额") or 0) for x in rows
+                    ),
+                    "period_days": len(rows),
+                }
+                return {
+                    "source": "eastmoney_fflow_daykline",
+                    "summary": summary,
+                    "recent": rows,
+                }
+    except Exception as e:
+        errors.append(f"em_fflow: {e}")
+
+    return {
+        "error": " | ".join(errors) if errors else "资金流不可用",
+        "note": "资金流数据缺失，报告中应标注数据缺失，勿编造",
     }
-    if out["ma20"]:
-        out["bias_ma20"] = float(out["last_close"] / out["ma20"] - 1)
-    return out
+
+
+def fetch_notices(code: str, days: int = 45, limit: int = 20) -> list:
+    """公司公告（东财个股公告）。"""
+    import akshare as ak
+
+    code = normalize_code(code)
+    end = datetime.now()
+    start = end - timedelta(days=days)
+    begin_s = start.strftime("%Y%m%d")
+    end_s = end.strftime("%Y%m%d")
+    errors: list = []
+
+    try:
+        df = _retry(
+            lambda: ak.stock_individual_notice_report(
+                security=code, begin_date=begin_s, end_date=end_s
+            ),
+            times=2,
+            sleep_s=1.5,
+        )
+        if df is not None and not df.empty:
+            keep = [
+                c
+                for c in ("代码", "名称", "公告标题", "公告类型", "公告日期", "网址")
+                if c in df.columns
+            ]
+            out = df[keep].copy() if keep else df.copy()
+            if "公告日期" in out.columns:
+                out["_d"] = pd.to_datetime(out["公告日期"], errors="coerce")
+                out = out.sort_values("_d", ascending=False).drop(columns=["_d"])
+            return _df_to_records(out.head(limit), limit=limit)
+    except Exception as e:
+        errors.append(f"individual_notice: {e}")
+
+    try:
+        df = _retry(
+            lambda: ak.stock_notice_report(symbol="全部", date=end.strftime("%Y%m%d")),
+            times=1,
+        )
+        if df is not None and not df.empty and "代码" in df.columns:
+            crow = df[df["代码"].astype(str).str.zfill(6) == code]
+            if not crow.empty:
+                return _df_to_records(crow.head(limit), limit=limit)
+    except Exception as e:
+        errors.append(f"notice_report: {e}")
+
+    return [
+        {
+            "error": " | ".join(errors) if errors else "无公告",
+            "note": "公告源暂时不可用，报告中应标注数据缺失",
+        }
+    ]
 
 
 def prepare(code: str) -> Dict[str, Any]:
@@ -482,6 +631,8 @@ def prepare(code: str) -> Dict[str, Any]:
     financial = fetch_financial_abstract(code)
     news = fetch_news(code)
     social = fetch_social(code)
+    fund_flow = fetch_fund_flow(code)
+    notices = fetch_notices(code)
 
     # 用社媒/日线补全快照失败时的基本信息
     xq = (social or {}).get("xueqiu_follow") or {}
@@ -513,9 +664,23 @@ def prepare(code: str) -> Dict[str, Any]:
         "daily_tail": daily[-30:] if isinstance(daily, list) else daily,
         "financial": financial,
         "news": news,
+        "notices": notices,
+        "fund_flow": fund_flow,
         "social": social,
         "ai_backend": "cursor-only",
         "note": "本数据包不含外部大模型结果；分析由 Cursor Agent 完成。",
+        "analysis_roles": [
+            "market",
+            "china_market",
+            "fundamental",
+            "news",
+            "social",
+            "bull",
+            "bear",
+            "risk",
+            "trader",
+            "judge",
+        ],
     }
 
     payload = _json_safe(payload)
@@ -535,15 +700,33 @@ def _fmt_num(v: Any, nd: int = 2) -> str:
         x = float(v)
         if abs(x) >= 1e8:
             return f"{x/1e8:.2f}亿"
+        if abs(x) >= 1e4:
+            return f"{x/1e4:.2f}万"
         return f"{x:.{nd}f}"
     except Exception:
         return str(v)
 
 
+def _clip_json(obj: Any, limit: int = 12000) -> str:
+    """序列化并安全截断，避免砍断后误导；超长时追加说明。"""
+    text = dumps_json(obj)
+    if len(text) <= limit:
+        return text
+    return text[:limit] + f"\n... [已截断，完整数据见同名 JSON；原文长度 {len(text)}]"
+
+
 def build_context_markdown(payload: Dict[str, Any]) -> str:
+    from .roles import REPORT_SECTIONS, SYSTEM_RULES
+
     b = payload.get("basic") or {}
     t = payload.get("technicals") or {}
     s = payload.get("social") or {}
+    macd = t.get("macd") or {}
+    boll = t.get("boll") or {}
+    kdj = t.get("kdj") or {}
+    ff = payload.get("fund_flow") or {}
+    ff_sum = ff.get("summary") or {}
+
     lines = [
         f"# A股分析数据包 {payload.get('code')}",
         "",
@@ -553,43 +736,85 @@ def build_context_markdown(payload: Dict[str, Any]) -> str:
         f"- PE/PB: {_fmt_num(b.get('pe'))} / {_fmt_num(b.get('pb'))}",
         f"- 总市值/流通市值: {_fmt_num(b.get('total_mv'))} / {_fmt_num(b.get('circ_mv'))}",
         f"- 数据源: {b.get('source') or 'N/A'}",
+        f"- AI 后端: {payload.get('ai_backend') or 'cursor-only'}",
         "",
         "## 技术摘要",
+        f"- 均线结构: {t.get('ma_structure') or 'N/A'}",
         f"- MA5/MA20/MA60: {_fmt_num(t.get('ma5'))} / {_fmt_num(t.get('ma20'))} / {_fmt_num(t.get('ma60'))}",
         f"- 5日/20日涨跌: {_pct(t.get('ret_5d'))} / {_pct(t.get('ret_20d'))}",
         f"- 20日年化波动: {_fmt_num(t.get('volatility_20d'), 3)}",
         f"- 相对MA20偏离: {_pct(t.get('bias_ma20'))}",
+        f"- MACD DIF/DEA/HIST: {_fmt_num(macd.get('dif'), 4)} / {_fmt_num(macd.get('dea'), 4)} / {_fmt_num(macd.get('hist'), 4)}  ({macd.get('signal') or 'N/A'})",
+        f"- RSI14: {_fmt_num(t.get('rsi14'))} ({t.get('rsi14_zone') or 'N/A'})",
+        f"- 布林 上/中/下: {_fmt_num(boll.get('upper'))} / {_fmt_num(boll.get('mid'))} / {_fmt_num(boll.get('lower'))}  ({boll.get('zone') or 'N/A'})",
+        f"- ATR14: {_fmt_num(t.get('atr14'))} ({_pct(t.get('atr14_pct'))} of price)",
+        f"- KDJ K/D/J: {_fmt_num(kdj.get('k'))} / {_fmt_num(kdj.get('d'))} / {_fmt_num(kdj.get('j'))}",
         "",
-        "## 社媒/情绪",
-        "```json",
-        dumps_json(s),
-        "```",
-        "",
-        "## 财务摘要（原始）",
-        "```json",
-        dumps_json(payload.get("financial") or [])[:6000],
-        "```",
-        "",
-        "## 新闻（原始）",
-        "```json",
-        dumps_json(payload.get("news") or [])[:6000],
-        "```",
-        "",
-        "## 近30日行情（原始）",
-        "```json",
-        dumps_json(payload.get("daily_tail") or [])[:6000],
-        "```",
-        "",
-        "## Cursor 分析指令",
-        "请扮演 TradingAgents 风格多智能体，仅基于以上数据输出：",
-        "1) 市场/技术面分析师",
-        "2) 基本面分析师",
-        "3) 新闻分析师",
-        "4) 社媒情绪分析师",
-        "5) 风险官",
-        "6) 综合裁决（含多空要点、失效条件、仓位建议仅作研究用）",
-        "要求：有数据引用；不确定就标明；不编造财报数字；中文。",
+        "## 资金流向摘要",
     ]
+    if ff.get("error"):
+        lines.append(f"- 数据缺失: {ff.get('error')}")
+        if ff.get("note"):
+            lines.append(f"- 备注: {ff.get('note')}")
+    else:
+        lines.extend(
+            [
+                f"- 来源: {ff.get('source') or 'N/A'}",
+                f"- 最近日期: {ff_sum.get('latest_date') or 'N/A'}",
+                f"- 主力净流入: {_fmt_num(ff_sum.get('main_net'))}",
+                f"- 主力净占比: {_fmt_num(ff_sum.get('main_net_pct'))}%",
+                f"- 超大单/大单净流入: {_fmt_num(ff_sum.get('super_net'))} / {_fmt_num(ff_sum.get('big_net'))}",
+                f"- 近{ff_sum.get('period_days') or 'N'}日主力净流入合计: {_fmt_num(ff_sum.get('main_net_sum_period'))}",
+            ]
+        )
+    lines.extend(
+        [
+            "",
+            "## 社媒/情绪",
+            "```json",
+            _clip_json(s, 4000),
+            "```",
+            "",
+            "## 财务摘要（原始）",
+            "```json",
+            _clip_json(payload.get("financial") or [], 10000),
+            "```",
+            "",
+            "## 新闻（原始）",
+            "```json",
+            _clip_json(payload.get("news") or [], 10000),
+            "```",
+            "",
+            "## 公司公告（原始）",
+            "```json",
+            _clip_json(payload.get("notices") or [], 8000),
+            "```",
+            "",
+            "## 资金流向明细（原始）",
+            "```json",
+            _clip_json(ff, 8000),
+            "```",
+            "",
+            "## 近30日行情（原始）",
+            "```json",
+            _clip_json(payload.get("daily_tail") or [], 10000),
+            "```",
+            "",
+            "## Cursor 分析指令",
+            SYSTEM_RULES,
+            "",
+            "请扮演 TradingAgents 风格多智能体，仅基于以上数据按下列章节输出中文报告：",
+        ]
+    )
+    for sec in REPORT_SECTIONS:
+        lines.append(sec)
+    lines.extend(
+        [
+            "",
+            "要求：有数据引用；不确定就标明「数据缺失」；不编造财报/新闻/公告数字；",
+            "技术面须引用 MA/MACD/RSI/布林/ATR/KDJ；报告末尾加免责声明。",
+        ]
+    )
     return "\n".join(lines)
 
 
