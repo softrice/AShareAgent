@@ -30,6 +30,27 @@ def cmd_prepare(code: str) -> int:
         print("[WARN] 公告: 数据缺失")
     else:
         print(f"[OK] 公告: {len(notices)} 条")
+    me = payload.get("market_env") or {}
+    if me.get("error"):
+        print("[WARN] 大盘环境: 数据缺失")
+    else:
+        print(f"[OK] 大盘: {me.get('source')} / {len(me.get('indices') or [])} 指数")
+    ind = payload.get("industry") or {}
+    if ind.get("error") and not ind.get("business"):
+        print("[WARN] 行业: 数据缺失")
+    else:
+        boards = ",".join(ind.get("guessed_boards") or []) or "主营已抓"
+        print(f"[OK] 行业: {boards}")
+    holders = payload.get("holders") or {}
+    if holders.get("error"):
+        print("[WARN] 股东户数: 数据缺失")
+    else:
+        print(f"[OK] 股东户数: {(holders.get('summary') or {}).get('asof')}")
+    nb = payload.get("northbound") or {}
+    if nb.get("error") and not nb.get("market_summary"):
+        print("[WARN] 北向: 数据缺失")
+    else:
+        print("[OK] 北向/沪深港通: 已抓取")
     print()
     print("下一步（二选一）：")
     print("  1) 在 Cursor 对 AShareAgent 项目说：分析 " + normalize_code(code))

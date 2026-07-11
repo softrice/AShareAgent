@@ -95,6 +95,8 @@ SYSTEM_RULES = """
 5. 对 A 股社媒只使用公开热度/股吧指标，不假装有 Reddit/Twitter。
 6. 技术面须引用数据包中的 MA/MACD/RSI/布林/ATR/KDJ（若存在）；资金流/公告缺失时不要脑补。
 7. 必须遵守 TARGET_PRICE_RULES：交易员/综合裁决给出具体目标价三情景，不得省略。
+8. 中国市场分析师须引用大盘环境、行业语境、股东户数、北向/沪深港通（若数据包有）；缺失则写「数据缺失」。
+9. 第 8 节末尾必须输出 decision JSON：action 仅「买入/持有/卖出」（观望用持有并说明），含基准目标价、置信度、风险分。
 """.strip()
 
 
@@ -129,6 +131,22 @@ def report_outline(code: str, name: str = "") -> str:
                     "",
                     "- 合理区间：¥__ – ¥__",
                     "- 止损/退出参考：¥__",
+                    "",
+                    "### 终裁 JSON（必须）",
+                    "```json",
+                    '{',
+                    '  "action": "买入|持有|卖出",',
+                    '  "target_price": 0,',
+                    '  "target_price_conservative": 0,',
+                    '  "target_price_optimistic": 0,',
+                    '  "price_range": {"low": 0, "high": 0},',
+                    '  "stop_loss": 0,',
+                    '  "confidence": 0,',
+                    '  "risk_score": 0,',
+                    '  "time_horizon": "1-3个月",',
+                    '  "reasoning": ""',
+                    "}",
+                    "```",
                     "",
                     "### 综合裁决",
                     "（在此填写）",
