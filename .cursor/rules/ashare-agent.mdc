@@ -11,15 +11,27 @@ alwaysApply: true
 
 ## 用户说「分析 XXXXXX」或「分析某股票」时
 
-1. 在项目根执行：
-   `E:\TradingAgents-CN\src\venv\Scripts\python.exe -m ashare_agent prepare <代码>`
-2. 读取 `data/<代码>_context.md`
-3. 按 `ashare_agent/roles.py` 的 6 个角色输出中文报告
-4. 用 `ashare_agent.fetch.save_report` 或直接写入 `reports/<代码>_latest.md`
+1. 在项目根执行（优先本仓库 Python，不要依赖 TradingAgents-CN 路径）：
+   - Windows: `analyze.bat <代码>`
+   - 或: `python -m ashare_agent prepare <代码>`
+2. 读取 `data/<代码>_context.md`（完整字段也在 `data/<代码>.json`）
+3. 按 `ashare_agent/roles.py` 的章节输出中文报告（含技术面指标、公告、资金流、多空辩论）
+4. 用 `ashare_agent.fetch.save_report` 或 `python -m ashare_agent save <代码> --file ...`，或直接写入 `reports/<代码>_latest.md`
 5. 报告末尾加免责声明：研究学习用途，不构成投资建议
+
+## 报告结构（必须）
+
+1. 市场/技术面分析师（引用 MA/MACD/RSI/布林/ATR/KDJ）
+2. 中国市场分析师
+3. 基本面分析师
+4. 新闻与公告分析师
+5. 社媒情绪分析师
+6. 多空辩论（看涨 / 看跌）
+7. 风险官（激进 / 中性 / 保守视角）
+8. 交易员与综合裁决
 
 ## 硬约束
 
-- 不编造财报/新闻；数据包没有的要写「数据缺失」
+- 不编造财报/新闻/公告/资金流；数据包没有的要写「数据缺失」
 - A 股社媒只用雪球关注/东财股吧等公开指标
 - 不要引导用户去部署 TradingAgents-CN 或申请第三方 LLM Key（除非用户主动要求）

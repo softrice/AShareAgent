@@ -16,6 +16,7 @@ Desktop.ini
 
 # Local scratch
 reports/_draft_*.md
+reports/*_outline.md
 *.log
 
 # Optional: keep sample data, ignore bulk dumps if added later
