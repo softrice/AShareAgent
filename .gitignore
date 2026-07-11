@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+.env.*
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+Thumbs.db
+Desktop.ini
+
+# Local scratch
+reports/_draft_*.md
+*.log
+
+# Optional: keep sample data, ignore bulk dumps if added later
+# data/*.json
