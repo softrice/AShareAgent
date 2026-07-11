@@ -78,7 +78,18 @@ def _df_to_records(df: Optional[pd.DataFrame], limit: int = 30) -> list:
         return []
     out = df.head(limit).copy()
     for col in list(out.columns):
-        if col in ("日期", "date", "Date", "data_date", "交易日", "公告日期", "发布时间"):
+        if col in (
+            "日期",
+            "date",
+            "Date",
+            "data_date",
+            "交易日",
+            "公告日期",
+            "发布时间",
+            "股东户数统计截止日",
+            "股东户数公告日期",
+            "持股日期",
+        ):
             out[col] = _normalize_date_series(out[col])
         elif pd.api.types.is_datetime64_any_dtype(out[col]):
             out[col] = out[col].astype(str)
@@ -178,7 +189,7 @@ def fetch_basic(code: str) -> Dict[str, Any]:
     return info
 
 
-def fetch_daily(code: str, days: int = 120) -> list:
+def fetch_daily(code: str, days: int = 250) -> list:
     import akshare as ak
 
     code = normalize_code(code)
@@ -634,6 +645,14 @@ def prepare(code: str) -> Dict[str, Any]:
     fund_flow = fetch_fund_flow(code)
     notices = fetch_notices(code)
 
+    # 延迟导入，避免与 enrich↔fetch 循环依赖
+    from .enrich import fetch_market_env, fetch_industry_context, fetch_holders, fetch_northbound
+
+    market_env = fetch_market_env()
+    industry = fetch_industry_context(code)
+    holders = fetch_holders(code)
+    northbound = fetch_northbound(code)
+
     # 用社媒/日线补全快照失败时的基本信息
     xq = (social or {}).get("xueqiu_follow") or {}
     guba = (social or {}).get("eastmoney_guba") or {}
@@ -666,6 +685,10 @@ def prepare(code: str) -> Dict[str, Any]:
         "news": news,
         "notices": notices,
         "fund_flow": fund_flow,
+        "market_env": market_env,
+        "industry": industry,
+        "holders": holders,
+        "northbound": northbound,
         "social": social,
         "ai_backend": "cursor-only",
         "note": "本数据包不含外部大模型结果；分析由 Cursor Agent 完成。",
@@ -693,15 +716,16 @@ def prepare(code: str) -> Dict[str, Any]:
     return payload
 
 
-def _fmt_num(v: Any, nd: int = 2) -> str:
+def _fmt_num(v: Any, nd: int = 2, plain: bool = False) -> str:
     try:
         if v is None:
             return "N/A"
         x = float(v)
-        if abs(x) >= 1e8:
-            return f"{x/1e8:.2f}亿"
-        if abs(x) >= 1e4:
-            return f"{x/1e4:.2f}万"
+        if not plain:
+            if abs(x) >= 1e8:
+                return f"{x/1e8:.2f}亿"
+            if abs(x) >= 1e4:
+                return f"{x/1e4:.2f}万"
         return f"{x:.{nd}f}"
     except Exception:
         return str(v)
@@ -716,7 +740,8 @@ def _clip_json(obj: Any, limit: int = 12000) -> str:
 
 
 def build_context_markdown(payload: Dict[str, Any]) -> str:
-    from .roles import REPORT_SECTIONS, SYSTEM_RULES
+    from .roles import REPORT_SECTIONS, SYSTEM_RULES, TARGET_PRICE_RULES
+    from .decision import DECISION_RULES, decision_block_example
 
     b = payload.get("basic") or {}
     t = payload.get("technicals") or {}
@@ -726,6 +751,10 @@ def build_context_markdown(payload: Dict[str, Any]) -> str:
     kdj = t.get("kdj") or {}
     ff = payload.get("fund_flow") or {}
     ff_sum = ff.get("summary") or {}
+    me = payload.get("market_env") or {}
+    ind = payload.get("industry") or {}
+    holders = payload.get("holders") or {}
+    nb = payload.get("northbound") or {}
 
     lines = [
         f"# A股分析数据包 {payload.get('code')}",
@@ -738,20 +767,79 @@ def build_context_markdown(payload: Dict[str, Any]) -> str:
         f"- 数据源: {b.get('source') or 'N/A'}",
         f"- AI 后端: {payload.get('ai_backend') or 'cursor-only'}",
         "",
-        "## 技术摘要",
-        f"- 均线结构: {t.get('ma_structure') or 'N/A'}",
-        f"- MA5/MA20/MA60: {_fmt_num(t.get('ma5'))} / {_fmt_num(t.get('ma20'))} / {_fmt_num(t.get('ma60'))}",
-        f"- 5日/20日涨跌: {_pct(t.get('ret_5d'))} / {_pct(t.get('ret_20d'))}",
-        f"- 20日年化波动: {_fmt_num(t.get('volatility_20d'), 3)}",
-        f"- 相对MA20偏离: {_pct(t.get('bias_ma20'))}",
-        f"- MACD DIF/DEA/HIST: {_fmt_num(macd.get('dif'), 4)} / {_fmt_num(macd.get('dea'), 4)} / {_fmt_num(macd.get('hist'), 4)}  ({macd.get('signal') or 'N/A'})",
-        f"- RSI14: {_fmt_num(t.get('rsi14'))} ({t.get('rsi14_zone') or 'N/A'})",
-        f"- 布林 上/中/下: {_fmt_num(boll.get('upper'))} / {_fmt_num(boll.get('mid'))} / {_fmt_num(boll.get('lower'))}  ({boll.get('zone') or 'N/A'})",
-        f"- ATR14: {_fmt_num(t.get('atr14'))} ({_pct(t.get('atr14_pct'))} of price)",
-        f"- KDJ K/D/J: {_fmt_num(kdj.get('k'))} / {_fmt_num(kdj.get('d'))} / {_fmt_num(kdj.get('j'))}",
-        "",
-        "## 资金流向摘要",
+        "## 大盘环境",
     ]
+    if me.get("error"):
+        lines.append(f"- 数据缺失: {me.get('error')}")
+    else:
+        lines.append(f"- 来源: {me.get('source') or 'N/A'}  时间: {me.get('asof') or 'N/A'}")
+        for ix in me.get("indices") or []:
+            lines.append(
+                f"- {ix.get('name')}: {_fmt_num(ix.get('price'), plain=True)}  涨跌幅 {_fmt_num(ix.get('pct_chg'), plain=True)}%"
+            )
+
+    lines.append("")
+    lines.append("## 行业语境")
+    biz = (ind.get("business") or {}) if isinstance(ind, dict) else {}
+    if ind.get("error") and not biz:
+        lines.append(f"- 数据缺失: {ind.get('error')}")
+    else:
+        if biz:
+            lines.append(f"- 主营: {biz.get('main_business') or 'N/A'}")
+            lines.append(f"- 产品: {biz.get('product_type') or 'N/A'}")
+        if ind.get("guessed_boards"):
+            lines.append(f"- 映射板块: {', '.join(ind.get('guessed_boards') or [])}")
+        for board in ind.get("boards") or []:
+            lines.append(
+                f"- 板块 {board.get('board')}: 近20日 {_pct(board.get('ret_20d'))}; "
+                f"同行PE中位数 {_fmt_num(board.get('peer_pe_median'))}; "
+                f"成分股数 {board.get('universe') or 'N/A'}"
+            )
+
+    hsum = holders.get("summary") or {}
+    lines.extend(["", "## 股东户数"])
+    if holders.get("error"):
+        lines.append(f"- 数据缺失: {holders.get('error')}")
+    else:
+        lines.append(f"- 截止: {hsum.get('asof') or 'N/A'}")
+        lines.append(
+            f"- 户数: {_fmt_num(hsum.get('holders'), 0)}（较上次 {_fmt_num(hsum.get('holders_chg'), 0)} / {_fmt_num(hsum.get('holders_chg_pct'))}%）"
+        )
+        lines.append(f"- 户均持股市值: {_fmt_num(hsum.get('avg_mv_per_account'))}")
+
+    lines.extend(["", "## 北向/沪深港通"])
+    if nb.get("error") and not nb.get("market_summary") and not nb.get("stock_holding"):
+        lines.append(f"- 数据缺失: {nb.get('error')}")
+    else:
+        if nb.get("market_summary"):
+            lines.append("- 市场摘要已附原始 JSON")
+        sh = ((nb.get("stock_holding") or {}).get("latest")) or {}
+        if sh:
+            lines.append(
+                f"- 个股北向最新: {sh.get('date')}  持股占比 {_fmt_num(sh.get('pct_of_a'))}%  "
+                f"持股市值 {_fmt_num(sh.get('mv'))}"
+            )
+            if (nb.get("stock_holding") or {}).get("note"):
+                lines.append(f"- 备注: {(nb.get('stock_holding') or {}).get('note')}")
+
+    lines.extend(
+        [
+            "",
+            "## 技术摘要",
+            f"- 均线结构: {t.get('ma_structure') or 'N/A'}",
+            f"- MA5/MA20/MA60: {_fmt_num(t.get('ma5'))} / {_fmt_num(t.get('ma20'))} / {_fmt_num(t.get('ma60'))}",
+            f"- 5日/20日涨跌: {_pct(t.get('ret_5d'))} / {_pct(t.get('ret_20d'))}",
+            f"- 20日年化波动: {_fmt_num(t.get('volatility_20d'), 3)}",
+            f"- 相对MA20偏离: {_pct(t.get('bias_ma20'))}",
+            f"- MACD DIF/DEA/HIST: {_fmt_num(macd.get('dif'), 4)} / {_fmt_num(macd.get('dea'), 4)} / {_fmt_num(macd.get('hist'), 4)}  ({macd.get('signal') or 'N/A'})",
+            f"- RSI14: {_fmt_num(t.get('rsi14'))} ({t.get('rsi14_zone') or 'N/A'})",
+            f"- 布林 上/中/下: {_fmt_num(boll.get('upper'))} / {_fmt_num(boll.get('mid'))} / {_fmt_num(boll.get('lower'))}  ({boll.get('zone') or 'N/A'})",
+            f"- ATR14: {_fmt_num(t.get('atr14'))} ({_pct(t.get('atr14_pct'))} of price)",
+            f"- KDJ K/D/J: {_fmt_num(kdj.get('k'))} / {_fmt_num(kdj.get('d'))} / {_fmt_num(kdj.get('j'))}",
+            "",
+            "## 资金流向摘要",
+        ]
+    )
     if ff.get("error"):
         lines.append(f"- 数据缺失: {ff.get('error')}")
         if ff.get("note"):
@@ -795,6 +883,19 @@ def build_context_markdown(payload: Dict[str, Any]) -> str:
             _clip_json(ff, 8000),
             "```",
             "",
+            "## 大盘/行业/股东/北向（原始）",
+            "```json",
+            _clip_json(
+                {
+                    "market_env": me,
+                    "industry": ind,
+                    "holders": holders,
+                    "northbound": nb,
+                },
+                14000,
+            ),
+            "```",
+            "",
             "## 近30日行情（原始）",
             "```json",
             _clip_json(payload.get("daily_tail") or [], 10000),
@@ -802,6 +903,13 @@ def build_context_markdown(payload: Dict[str, Any]) -> str:
             "",
             "## Cursor 分析指令",
             SYSTEM_RULES,
+            "",
+            TARGET_PRICE_RULES,
+            "",
+            DECISION_RULES,
+            "",
+            "终裁 JSON 示例（请按真实分析改写数值，勿照抄）：",
+            decision_block_example(),
             "",
             "请扮演 TradingAgents 风格多智能体，仅基于以上数据按下列章节输出中文报告：",
         ]
@@ -812,7 +920,8 @@ def build_context_markdown(payload: Dict[str, Any]) -> str:
         [
             "",
             "要求：有数据引用；不确定就标明「数据缺失」；不编造财报/新闻/公告数字；",
-            "技术面须引用 MA/MACD/RSI/布林/ATR/KDJ；报告末尾加免责声明。",
+            "技术面须引用 MA/MACD/RSI/布林/ATR/KDJ；须引用大盘/行业/股东/北向（若有）；",
+            "第8节必须含目标价三情景 + 末尾 decision JSON（action 仅买入/持有/卖出）；报告末尾加免责声明。",
         ]
     )
     return "\n".join(lines)
