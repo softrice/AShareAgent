@@ -716,7 +716,7 @@ def _clip_json(obj: Any, limit: int = 12000) -> str:
 
 
 def build_context_markdown(payload: Dict[str, Any]) -> str:
-    from .roles import REPORT_SECTIONS, SYSTEM_RULES
+    from .roles import REPORT_SECTIONS, SYSTEM_RULES, TARGET_PRICE_RULES
 
     b = payload.get("basic") or {}
     t = payload.get("technicals") or {}
@@ -803,6 +803,8 @@ def build_context_markdown(payload: Dict[str, Any]) -> str:
             "## Cursor 分析指令",
             SYSTEM_RULES,
             "",
+            TARGET_PRICE_RULES,
+            "",
             "请扮演 TradingAgents 风格多智能体，仅基于以上数据按下列章节输出中文报告：",
         ]
     )
@@ -812,7 +814,7 @@ def build_context_markdown(payload: Dict[str, Any]) -> str:
         [
             "",
             "要求：有数据引用；不确定就标明「数据缺失」；不编造财报/新闻/公告数字；",
-            "技术面须引用 MA/MACD/RSI/布林/ATR/KDJ；报告末尾加免责声明。",
+            "技术面须引用 MA/MACD/RSI/布林/ATR/KDJ；第8节必须含目标价三情景；报告末尾加免责声明。",
         ]
     )
     return "\n".join(lines)

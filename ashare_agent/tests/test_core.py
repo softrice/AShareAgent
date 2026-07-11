@@ -5,7 +5,7 @@ import unittest
 
 from ashare_agent.fetch import normalize_code, market_tag, em_secid, xq_symbol
 from ashare_agent.indicators import calc_technicals
-from ashare_agent.roles import ROLES, REPORT_SECTIONS, report_outline
+from ashare_agent.roles import ROLES, REPORT_SECTIONS, TARGET_PRICE_RULES, report_outline
 
 
 class TestNormalize(unittest.TestCase):
@@ -50,8 +50,13 @@ class TestRoles(unittest.TestCase):
         for need in ("market", "china_market", "bull", "bear", "trader", "judge"):
             self.assertIn(need, ids)
         self.assertGreaterEqual(len(REPORT_SECTIONS), 8)
+        self.assertTrue(any("目标价" in s for s in REPORT_SECTIONS))
+        self.assertIn("三情景", TARGET_PRICE_RULES)
+        self.assertIn("无法确定", TARGET_PRICE_RULES)
         text = report_outline("002128", "电投能源")
         self.assertIn("多空辩论", text)
+        self.assertIn("目标价", text)
+        self.assertIn("保守", text)
         self.assertIn("免责声明", text)
 
 

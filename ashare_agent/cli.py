@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 from .fetch import DATA_DIR, REPORTS_DIR, prepare, normalize_code, save_report
-from .roles import SYSTEM_RULES, ROLES, REPORT_SECTIONS, report_outline
+from .roles import SYSTEM_RULES, ROLES, REPORT_SECTIONS, TARGET_PRICE_RULES, report_outline
 
 
 def cmd_prepare(code: str) -> int:
@@ -51,6 +51,8 @@ def cmd_show(code: str) -> int:
 
 def cmd_roles(_: str = "") -> int:
     print(SYSTEM_RULES)
+    print()
+    print(TARGET_PRICE_RULES)
     print()
     print("报告章节：")
     for sec in REPORT_SECTIONS:
