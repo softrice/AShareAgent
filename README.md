@@ -37,6 +37,16 @@ python -m venv .venv
 .venv/bin/pip install -r requirements.txt
 ```
 
+## Cursor Cloud 环境
+
+仓库包含 `.cursor/environment.json`，Cursor Cloud Agent 启动时会在项目根执行：
+
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+因此后续云端 Agent 可直接运行 `python3 -m ashare_agent prepare <股票代码>` 抓取数据。
+
 ## 用法
 
 1. 用 Cursor **打开本仓库文件夹**。
