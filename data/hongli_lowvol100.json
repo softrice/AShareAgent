@@ -1,0 +1,239 @@
+{
+  "generated_at": "2026-07-15 07:05:38",
+  "asof_session": "2026-07-15 收盘",
+  "theme": "红利低波100",
+  "ai_backend": "cursor-only",
+  "note": "2026-07-15收盘专项：核心515100景顺，对照159307博时与系列512890。",
+  "decision_core_code": "515100",
+  "representatives": [
+    {
+      "code": "515100",
+      "name": "红利低波100ETF景顺",
+      "latest_price": 1.397,
+      "pct_chg": 1.53,
+      "open": 1.37,
+      "high": 1.399,
+      "low": 1.366,
+      "prev_close": 1.376,
+      "amount": 159671767.0,
+      "total_market_value": 5824011281.0,
+      "main_net_inflow": 4977806.0,
+      "discount_premium_pct": -0.04,
+      "iopv": 1.3964,
+      "turnover": 2.76,
+      "ma5": 1.366,
+      "ma20": 1.3459,
+      "ma60": 1.404067,
+      "macd_signal": "柱为正（偏多动能）",
+      "macd": {
+        "dif": -0.006345,
+        "dea": -0.015652,
+        "hist": 0.009307,
+        "hist_prev": 0.007339
+      },
+      "rsi14": 58.965733,
+      "boll": {
+        "mid": 1.3459,
+        "upper": 1.395754,
+        "lower": 1.296046,
+        "position": 1.012495,
+        "zone": "触及/突破上轨"
+      },
+      "atr14": 0.022866,
+      "atr14_pct": 0.016368,
+      "kdj": {
+        "k": 91.513758,
+        "d": 83.114547,
+        "j": 108.31218
+      },
+      "ma_structure": "均线纠缠/过渡",
+      "recent_60d_low": 1.299,
+      "recent_60d_high": 1.458,
+      "ret_5d": 0.030236,
+      "ret_20d": 0.00576,
+      "ret_60d": -0.035221,
+      "tech_note": "收盘快照并入2026-07-15 K线（完整日线止于2026-07-14）",
+      "hist_last_date": "2026-07-14",
+      "above_ma60": false,
+      "gap_to_ma60_pct": 0.51
+    },
+    {
+      "code": "159307",
+      "name": "红利低波100ETF博时",
+      "latest_price": 1.017,
+      "pct_chg": 1.6,
+      "open": 0.996,
+      "high": 1.02,
+      "low": 0.995,
+      "prev_close": 1.001,
+      "amount": 151739970.805,
+      "total_market_value": 7607061847.0,
+      "main_net_inflow": 23995671.0,
+      "discount_premium_pct": 0.22,
+      "iopv": 1.0192,
+      "turnover": 2.01,
+      "ma5": 0.9958,
+      "ma20": 0.9826,
+      "ma60": 1.031317,
+      "macd_signal": "柱为正（偏多动能）",
+      "macd": {
+        "dif": -0.006731,
+        "dea": -0.013536,
+        "hist": 0.006805,
+        "hist_prev": 0.005427
+      },
+      "rsi14": 57.332444,
+      "boll": {
+        "mid": 0.9826,
+        "upper": 1.017407,
+        "lower": 0.947793,
+        "position": 0.994152,
+        "zone": "轨道内"
+      },
+      "atr14": 0.016276,
+      "atr14_pct": 0.016004,
+      "kdj": {
+        "k": 89.590897,
+        "d": 82.352313,
+        "j": 104.068067
+      },
+      "ma_structure": "均线纠缠/过渡",
+      "recent_60d_low": 0.949,
+      "recent_60d_high": 1.075,
+      "ret_5d": 0.027273,
+      "ret_20d": 0.002959,
+      "ret_60d": -0.04686,
+      "tech_note": "收盘快照并入2026-07-15 K线（完整日线止于2026-07-14）",
+      "hist_last_date": "2026-07-14",
+      "above_ma60": false,
+      "gap_to_ma60_pct": 1.41
+    },
+    {
+      "code": "512890",
+      "name": "红利低波ETF华泰柏瑞",
+      "latest_price": 1.152,
+      "pct_chg": 1.14,
+      "open": 1.132,
+      "high": 1.154,
+      "low": 1.13,
+      "prev_close": 1.139,
+      "amount": 840264302.0,
+      "total_market_value": 34697215771.0,
+      "main_net_inflow": 56338192.0,
+      "discount_premium_pct": -0.26,
+      "iopv": 1.149,
+      "turnover": 2.44,
+      "ma5": 1.127,
+      "ma20": 1.1068,
+      "ma60": 1.150717,
+      "macd_signal": "柱为正（偏多动能）",
+      "macd": {
+        "dif": -0.003403,
+        "dea": -0.011701,
+        "hist": 0.008298,
+        "hist_prev": 0.006795
+      },
+      "rsi14": 59.914819,
+      "boll": {
+        "mid": 1.1068,
+        "upper": 1.151646,
+        "lower": 1.061954,
+        "position": 1.003942,
+        "zone": "触及/突破上轨"
+      },
+      "atr14": 0.01917,
+      "atr14_pct": 0.01664,
+      "kdj": {
+        "k": 91.482472,
+        "d": 81.57051,
+        "j": 111.306397
+      },
+      "ma_structure": "均线纠缠/过渡",
+      "recent_60d_low": 1.067,
+      "recent_60d_high": 1.198,
+      "ret_5d": 0.028571,
+      "ret_20d": 0.006114,
+      "ret_60d": -0.031119,
+      "tech_note": "收盘快照并入2026-07-15 K线（完整日线止于2026-07-14）",
+      "hist_last_date": "2026-07-14",
+      "above_ma60": true,
+      "gap_to_ma60_pct": -0.11
+    }
+  ],
+  "hongli100_peers": [
+    {
+      "code": "515100",
+      "name": "红利低波100ETF景顺",
+      "price": 1.397,
+      "pct_chg": 1.53,
+      "amount": 159671767.0,
+      "main_net_inflow": 4977806.0
+    },
+    {
+      "code": "159307",
+      "name": "红利低波100ETF博时",
+      "price": 1.017,
+      "pct_chg": 1.6,
+      "amount": 151739970.805,
+      "main_net_inflow": 23995671.0
+    },
+    {
+      "code": "560720",
+      "name": "红利低波100ETF工银",
+      "price": 0.976,
+      "pct_chg": 1.14,
+      "amount": 11190974.0,
+      "main_net_inflow": 1341938.0
+    },
+    {
+      "code": "515480",
+      "name": "红利低波100ETF南方",
+      "price": 1.055,
+      "pct_chg": 1.54,
+      "amount": 8984474.0,
+      "main_net_inflow": 87316.0
+    },
+    {
+      "code": "560520",
+      "name": "红利低波100ETF大成",
+      "price": 1.086,
+      "pct_chg": 1.21,
+      "amount": 181646.0,
+      "main_net_inflow": -48800.0
+    }
+  ],
+  "market_env": {
+    "source": "sina_index_spot",
+    "asof": "2026-07-15 07:05:38",
+    "indices": [
+      {
+        "name": "上证指数",
+        "price": 3955.5781,
+        "pct_chg": -0.291
+      },
+      {
+        "name": "深证成指",
+        "price": 14779.396,
+        "pct_chg": -0.975
+      },
+      {
+        "name": "创业板指",
+        "price": 3804.704,
+        "pct_chg": -1.206
+      },
+      {
+        "name": "科创50",
+        "price": 1924.2735,
+        "pct_chg": -4.252
+      },
+      {
+        "name": "沪深300",
+        "price": 4786.7828,
+        "pct_chg": -0.203
+      }
+    ]
+  },
+  "northbound": {
+    "note": "本日未重抓个券北向；报告标注数据缺失。"
+  }
+}
