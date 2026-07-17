@@ -1,90 +1,107 @@
 {
-  "generated_at": "2026-07-17 02:15:29",
-  "asof_session": "2026-07-17 盘中",
+  "generated_at": "2026-07-17 06:52:12",
+  "asof_session": "2026-07-17 盘中偏收盘",
   "code": "159307",
   "theme": "红利低波100ETF博时",
+  "ai_backend": "cursor-only",
   "quote_tech": {
+    "generated_at": "2026-07-17 06:52:12",
+    "asof_session": "2026-07-17 盘中偏收盘",
     "code": "159307",
     "name": "红利低波100ETF博时",
-    "latest_price": 1.026,
-    "pct_chg": 0.79,
+    "price": 1.02,
+    "pct": 0.2,
     "open": 1.017,
     "high": 1.031,
-    "low": 1.016,
-    "prev_close": 1.018,
-    "iopv": 1.0269,
-    "discount_premium_pct": 0.09,
-    "amount": 56734544.7,
-    "main_net_inflow": 8487172.0,
-    "ma20": 0.9849,
-    "ma60": 1.03,
+    "low": 1.014,
+    "prev": 1.018,
+    "iopv": 1.0194,
+    "premium": -0.06,
+    "amount": 150123448.314,
+    "main": 10802039.0,
+    "turnover": 1.98,
+    "mv": 7550961623.0,
+    "ma5": 1.0102,
+    "ma20": 0.9845,
+    "ma60": 1.0299,
     "above_ma60": false,
-    "gap_to_ma60_pct": 0.39,
-    "rsi14": 60.52,
-    "kdj_j": 97.1,
+    "gap_pct": 0.97,
+    "rsi": 58.43,
+    "j": 89.2,
+    "k": 86.6,
+    "d": 85.3,
     "macd_signal": "柱为正（偏多动能）",
-    "macd_hist": 0.008159,
+    "macd_hist": 0.007776,
     "boll_zone": "轨道内",
-    "boll_upper": 1.0261,
-    "recent_60d_high": 1.075,
-    "recent_60d_low": 0.949,
-    "hist_last_date": "2026-07-16"
-  },
-  "compare_515100": {
-    "code": "515100",
-    "name": "红利低波100ETF景顺",
-    "latest_price": 1.406,
-    "pct_chg": 0.72,
-    "open": 1.397,
-    "high": 1.413,
-    "low": 1.397,
-    "prev_close": 1.396,
-    "iopv": 1.4078,
-    "discount_premium_pct": 0.13,
-    "amount": 70024191.0,
-    "main_net_inflow": 5192063.0,
-    "ma20": 1.3492,
-    "ma60": 1.4028,
-    "above_ma60": true,
-    "gap_to_ma60_pct": -0.23,
-    "rsi14": 61.11,
-    "kdj_j": 98.4,
-    "macd_signal": "柱为正（偏多动能）",
-    "macd_hist": 0.010875,
-    "boll_zone": "轨道内",
-    "boll_upper": 1.408,
-    "recent_60d_high": 1.458,
-    "recent_60d_low": 1.299,
-    "hist_last_date": "2026-07-16"
-  },
-  "market_env": {
-    "source": "sina_index_spot",
-    "asof": "2026-07-17 02:15:29",
-    "indices": [
+    "boll_upper": 1.0246,
+    "boll_lower": 0.9445,
+    "boll_mid": 0.9845,
+    "hi60": 1.075,
+    "lo60": 0.949,
+    "ret_5d": 0.0355,
+    "ret_20d": 0.0293,
+    "hist_last": "2026-07-16",
+    "market": [
       {
         "name": "上证指数",
-        "price": 3841.7158,
-        "pct_chg": -1.048
+        "price": 3770.1185,
+        "pct_chg": -2.892
       },
       {
         "name": "深证成指",
-        "price": 14074.325,
-        "pct_chg": -2.86
+        "price": 13746.695,
+        "pct_chg": -5.121
       },
       {
         "name": "创业板指",
-        "price": 3553.877,
-        "pct_chg": -3.753
+        "price": 3445.87,
+        "pct_chg": -6.678
+      },
+      {
+        "name": "科创50",
+        "price": 1715.1627,
+        "pct_chg": -7.132
       },
       {
         "name": "沪深300",
-        "price": 4605.61,
-        "pct_chg": -1.976
+        "price": 4538.947,
+        "pct_chg": -3.394
+      }
+    ],
+    "index_note": "标的指数实时点位本日未单独抓取；以宽基下跌+ETF上涨描述相对强弱。"
+  },
+  "market_env": {
+    "source": "sina_index_spot",
+    "indices": [
+      {
+        "name": "上证指数",
+        "price": 3770.1185,
+        "pct_chg": -2.892
+      },
+      {
+        "name": "深证成指",
+        "price": 13746.695,
+        "pct_chg": -5.121
+      },
+      {
+        "name": "创业板指",
+        "price": 3445.87,
+        "pct_chg": -6.678
+      },
+      {
+        "name": "科创50",
+        "price": 1715.1627,
+        "pct_chg": -7.132
+      },
+      {
+        "name": "沪深300",
+        "price": 4538.947,
+        "pct_chg": -3.394
       }
     ]
   },
   "northbound": {
     "note": "数据缺失"
   },
-  "ai_backend": "cursor-only"
+  "note": "仅分析159307；用户关注宽基大跌而ETF仍涨。"
 }
