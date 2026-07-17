@@ -1,0 +1,98 @@
+{
+  "generated_at": "2026-07-17 02:15:29",
+  "asof_session": "2026-07-17 盘中",
+  "theme": "红利低波100",
+  "decision_core_code": "159307",
+  "ai_backend": "cursor-only",
+  "note": "弱市翻红专项：回答今天能否买。",
+  "representatives": [
+    {
+      "code": "159307",
+      "name": "红利低波100ETF博时",
+      "latest_price": 1.026,
+      "pct_chg": 0.79,
+      "open": 1.017,
+      "high": 1.031,
+      "low": 1.016,
+      "prev_close": 1.018,
+      "iopv": 1.0269,
+      "discount_premium_pct": 0.09,
+      "amount": 56734544.7,
+      "main_net_inflow": 8487172.0,
+      "ma20": 0.9849,
+      "ma60": 1.03,
+      "above_ma60": false,
+      "gap_to_ma60_pct": 0.39,
+      "rsi14": 60.52,
+      "kdj_j": 97.1,
+      "macd_signal": "柱为正（偏多动能）",
+      "macd_hist": 0.008159,
+      "boll_zone": "轨道内",
+      "boll_upper": 1.0261,
+      "recent_60d_high": 1.075,
+      "recent_60d_low": 0.949,
+      "hist_last_date": "2026-07-16"
+    },
+    {
+      "code": "515100",
+      "name": "红利低波100ETF景顺",
+      "latest_price": 1.406,
+      "pct_chg": 0.72,
+      "open": 1.397,
+      "high": 1.413,
+      "low": 1.397,
+      "prev_close": 1.396,
+      "iopv": 1.4078,
+      "discount_premium_pct": 0.13,
+      "amount": 70024191.0,
+      "main_net_inflow": 5192063.0,
+      "ma20": 1.3492,
+      "ma60": 1.4028,
+      "above_ma60": true,
+      "gap_to_ma60_pct": -0.23,
+      "rsi14": 61.11,
+      "kdj_j": 98.4,
+      "macd_signal": "柱为正（偏多动能）",
+      "macd_hist": 0.010875,
+      "boll_zone": "轨道内",
+      "boll_upper": 1.408,
+      "recent_60d_high": 1.458,
+      "recent_60d_low": 1.299,
+      "hist_last_date": "2026-07-16"
+    }
+  ],
+  "market_env": {
+    "source": "sina_index_spot",
+    "asof": "2026-07-17 02:15:29",
+    "indices": [
+      {
+        "name": "上证指数",
+        "price": 3841.7158,
+        "pct_chg": -1.048
+      },
+      {
+        "name": "深证成指",
+        "price": 14074.325,
+        "pct_chg": -2.86
+      },
+      {
+        "name": "创业板指",
+        "price": 3553.877,
+        "pct_chg": -3.753
+      },
+      {
+        "name": "沪深300",
+        "price": 4605.61,
+        "pct_chg": -1.976
+      }
+    ]
+  },
+  "northbound": {
+    "note": "数据缺失"
+  },
+  "compare_vs_0716": {
+    "159307_then": 1.02,
+    "515100_then": 1.4,
+    "action_then": "持有"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "generated_at": "2026-07-17 06:52:12",
+  "asof_session": "2026-07-17 盘中偏收盘",
+  "code": "159307",
+  "theme": "红利低波100ETF博时",
+  "ai_backend": "cursor-only",
+  "quote_tech": {
+    "generated_at": "2026-07-17 06:52:12",
+    "asof_session": "2026-07-17 盘中偏收盘",
+    "code": "159307",
+    "name": "红利低波100ETF博时",
+    "price": 1.02,
+    "pct": 0.2,
+    "open": 1.017,
+    "high": 1.031,
+    "low": 1.014,
+    "prev": 1.018,
+    "iopv": 1.0194,
+    "premium": -0.06,
+    "amount": 150123448.314,
+    "main": 10802039.0,
+    "turnover": 1.98,
+    "mv": 7550961623.0,
+    "ma5": 1.0102,
+    "ma20": 0.9845,
+    "ma60": 1.0299,
+    "above_ma60": false,
+    "gap_pct": 0.97,
+    "rsi": 58.43,
+    "j": 89.2,
+    "k": 86.6,
+    "d": 85.3,
+    "macd_signal": "柱为正（偏多动能）",
+    "macd_hist": 0.007776,
+    "boll_zone": "轨道内",
+    "boll_upper": 1.0246,
+    "boll_lower": 0.9445,
+    "boll_mid": 0.9845,
+    "hi60": 1.075,
+    "lo60": 0.949,
+    "ret_5d": 0.0355,
+    "ret_20d": 0.0293,
+    "hist_last": "2026-07-16",
+    "market": [
+      {
+        "name": "上证指数",
+        "price": 3770.1185,
+        "pct_chg": -2.892
+      },
+      {
+        "name": "深证成指",
+        "price": 13746.695,
+        "pct_chg": -5.121
+      },
+      {
+        "name": "创业板指",
+        "price": 3445.87,
+        "pct_chg": -6.678
+      },
+      {
+        "name": "科创50",
+        "price": 1715.1627,
+        "pct_chg": -7.132
+      },
+      {
+        "name": "沪深300",
+        "price": 4538.947,
+        "pct_chg": -3.394
+      }
+    ],
+    "index_note": "标的指数实时点位本日未单独抓取；以宽基下跌+ETF上涨描述相对强弱。"
+  },
+  "market_env": {
+    "source": "sina_index_spot",
+    "indices": [
+      {
+        "name": "上证指数",
+        "price": 3770.1185,
+        "pct_chg": -2.892
+      },
+      {
+        "name": "深证成指",
+        "price": 13746.695,
+        "pct_chg": -5.121
+      },
+      {
+        "name": "创业板指",
+        "price": 3445.87,
+        "pct_chg": -6.678
+      },
+      {
+        "name": "科创50",
+        "price": 1715.1627,
+        "pct_chg": -7.132
+      },
+      {
+        "name": "沪深300",
+        "price": 4538.947,
+        "pct_chg": -3.394
+      }
+    ]
+  },
+  "northbound": {
+    "note": "数据缺失"
+  },
+  "note": "仅分析159307；用户关注宽基大跌而ETF仍涨。"
+}
