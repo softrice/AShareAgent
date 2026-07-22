@@ -1,0 +1,147 @@
+{
+  "generated_at": "2026-07-22 02:29:06",
+  "asof_session": "2026-07-22 盘中",
+  "code": "159307",
+  "theme": "红利低波100ETF博时",
+  "ai_backend": "cursor-only",
+  "quote_tech": {
+    "code": "159307",
+    "name": "红利低波100ETF博时",
+    "latest_price": 1.019,
+    "pct_chg": -1.16,
+    "open": 1.027,
+    "high": 1.03,
+    "low": 1.017,
+    "prev_close": 1.031,
+    "iopv": 1.0186,
+    "discount_premium_pct": -0.04,
+    "amount": 57246583.7,
+    "main_net_inflow": -13077773.0,
+    "turnover": 0.76,
+    "total_market_value": 7485475785.0,
+    "ma5": 1.0246,
+    "ma20": 0.9909,
+    "ma60": 1.0278,
+    "above_ma60": false,
+    "gap_to_ma60_pct": 0.87,
+    "rsi14": 55.09,
+    "kdj": {
+      "k": 75.22,
+      "d": 82.09,
+      "j": 61.48
+    },
+    "macd_signal": "柱为正（偏多动能）",
+    "macd": {
+      "dif": 0.003593,
+      "dea": -0.003653,
+      "hist": 0.007246,
+      "hist_prev": 0.008498
+    },
+    "boll": {
+      "mid": 0.99095,
+      "upper": 1.042267,
+      "lower": 0.939633,
+      "position": 0.7733,
+      "zone": "轨道内"
+    },
+    "atr14": 0.017022,
+    "atr14_pct": 0.016705,
+    "ma_structure": "均线纠缠/过渡",
+    "recent_60d_high": 1.075,
+    "recent_60d_low": 0.949,
+    "ret_5d": 0.002,
+    "ret_20d": 0.0473,
+    "hist_last_date": "2026-07-21",
+    "tech_note": "含2026-07-22临时K（完整日线止于2026-07-21）"
+  },
+  "compare_515100": {
+    "code": "515100",
+    "name": "红利低波100ETF景顺",
+    "latest_price": 1.396,
+    "pct_chg": -1.27,
+    "open": 1.411,
+    "high": 1.411,
+    "low": 1.393,
+    "prev_close": 1.414,
+    "iopv": 1.3955,
+    "discount_premium_pct": -0.04,
+    "amount": 85947359.0,
+    "main_net_inflow": -7921837.0,
+    "turnover": 1.52,
+    "total_market_value": 5637664340.0,
+    "ma5": 1.4052,
+    "ma20": 1.3579,
+    "ma60": 1.4006,
+    "above_ma60": false,
+    "gap_to_ma60_pct": 0.33,
+    "rsi14": 55.21,
+    "kdj": {
+      "k": 75.46,
+      "d": 83.04,
+      "j": 60.3
+    },
+    "macd_signal": "柱为正（偏多动能）",
+    "macd": {
+      "dif": 0.007031,
+      "dea": -0.002441,
+      "hist": 0.009471,
+      "hist_prev": 0.011356
+    },
+    "boll": {
+      "mid": 1.35795,
+      "upper": 1.431207,
+      "lower": 1.284693,
+      "position": 0.759704,
+      "zone": "轨道内"
+    },
+    "atr14": 0.024228,
+    "atr14_pct": 0.017355,
+    "ma_structure": "均线纠缠/过渡",
+    "recent_60d_high": 1.458,
+    "recent_60d_low": 1.299,
+    "ret_5d": -0.0007,
+    "ret_20d": 0.0473,
+    "hist_last_date": "2026-07-21",
+    "tech_note": "含2026-07-22临时K（完整日线止于2026-07-21）"
+  },
+  "market_env": {
+    "source": "sina_index_spot",
+    "asof": "2026-07-22 02:29:06",
+    "indices": [
+      {
+        "name": "上证指数",
+        "price": 3880.3467,
+        "pct_chg": 0.414
+      },
+      {
+        "name": "深证成指",
+        "price": 14343.483,
+        "pct_chg": 0.555
+      },
+      {
+        "name": "创业板指",
+        "price": 3675.646,
+        "pct_chg": -0.28
+      },
+      {
+        "name": "科创50",
+        "price": 1924.5444,
+        "pct_chg": 1.124
+      },
+      {
+        "name": "沪深300",
+        "price": 4764.3103,
+        "pct_chg": 0.529
+      }
+    ]
+  },
+  "northbound": {
+    "note": "数据缺失"
+  },
+  "compare_vs_0720": {
+    "159307_then": 1.036,
+    "action_then": "买入",
+    "note": "对照7/20首次站上MA60后的小仓买入裁决"
+  },
+  "recent_closes_note": "7/20收1.037站上MA60；7/21收1.031仍站上；7/22盘中约1.019回落至MA60下"
+}
