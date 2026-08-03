@@ -1,0 +1,157 @@
+{
+  "generated_at": "2026-08-03 16:16:41",
+  "asof_session": "2026-08-03 收盘",
+  "code": "159307",
+  "theme": "红利低波100ETF博时",
+  "ai_backend": "cursor-only",
+  "quote_tech": {
+    "code": "159307",
+    "name": "红利低波100ETF博时",
+    "latest_price": 1.064,
+    "pct_chg": 0.09,
+    "open": 1.062,
+    "high": 1.073,
+    "low": 1.06,
+    "prev_close": 1.063,
+    "iopv": 1.0654,
+    "discount_premium_pct": 0.13,
+    "amount": 93915975.872,
+    "main_net_inflow": 9433425.0,
+    "ma5": 1.0554,
+    "ma20": 1.0229,
+    "ma60": 1.025,
+    "above_ma60": true,
+    "gap_to_ma60_pct": -3.66,
+    "rsi14": 69.55,
+    "kdj": {
+      "k": 84.52,
+      "d": 80.62,
+      "j": 92.32
+    },
+    "macd_signal": "柱为正（偏多动能）",
+    "macd": {
+      "dif": 0.014484,
+      "dea": 0.008627,
+      "hist": 0.005857,
+      "hist_prev": 0.006161
+    },
+    "boll": {
+      "mid": 1.02285,
+      "upper": 1.076943,
+      "lower": 0.968757,
+      "position": 0.880366,
+      "zone": "轨道内"
+    },
+    "recent_60d_high": 1.07,
+    "recent_60d_low": 0.949,
+    "ret_5d": 0.033,
+    "ret_20d": 0.0715,
+    "hist_last_date": "2026-08-03",
+    "tech_note": "日线已含2026-08-03"
+  },
+  "compare_515100": {
+    "code": "515100",
+    "name": "红利低波100ETF景顺",
+    "latest_price": 1.463,
+    "pct_chg": 0.0,
+    "open": 1.462,
+    "high": 1.475,
+    "low": 1.456,
+    "prev_close": 1.463,
+    "iopv": 1.4635,
+    "discount_premium_pct": 0.03,
+    "amount": 151968496.0,
+    "main_net_inflow": -13897685.0,
+    "ma5": 1.452,
+    "ma20": 1.4039,
+    "ma60": 1.3991,
+    "above_ma60": true,
+    "gap_to_ma60_pct": -4.37,
+    "rsi14": 69.59,
+    "kdj": {
+      "k": 86.98,
+      "d": 82.74,
+      "j": 95.46
+    },
+    "macd_signal": "柱为正（偏多动能）",
+    "macd": {
+      "dif": 0.022176,
+      "dea": 0.014014,
+      "hist": 0.008162,
+      "hist_prev": 0.008645
+    },
+    "boll": {
+      "mid": 1.40385,
+      "upper": 1.481191,
+      "lower": 1.326509,
+      "position": 0.882399,
+      "zone": "轨道内"
+    },
+    "recent_60d_high": 1.465,
+    "recent_60d_low": 1.299,
+    "ret_5d": 0.0354,
+    "ret_20d": 0.0749,
+    "hist_last_date": "2026-08-03",
+    "tech_note": "日线已含2026-08-03"
+  },
+  "market_env": {
+    "source": "sina_index_spot",
+    "asof": "2026-08-03 16:16:41",
+    "indices": [
+      {
+        "name": "上证指数",
+        "price": 3809.6629,
+        "pct_chg": -0.59
+      },
+      {
+        "name": "深证成指",
+        "price": 13448.289,
+        "pct_chg": -0.962
+      },
+      {
+        "name": "创业板指",
+        "price": 3302.553,
+        "pct_chg": -1.238
+      },
+      {
+        "name": "科创50",
+        "price": 1552.8903,
+        "pct_chg": -5.078
+      },
+      {
+        "name": "沪深300",
+        "price": 4543.1781,
+        "pct_chg": -0.981
+      }
+    ]
+  },
+  "northbound": {
+    "note": "数据缺失"
+  },
+  "position_context": {
+    "total_capital_approx": 4000000,
+    "hongli_position_approx": 2140000,
+    "hongli_pct_of_total": 53.5,
+    "ref_cost": 1.034,
+    "pnl_pct_vs_ref": 2.9
+  },
+  "compare_vs_0731": {
+    "159307_then": 1.054,
+    "action_then": "持有"
+  },
+  "note": "2026-08-03收盘更新；总资金约400万，红利低波主题约214万（约53.5%），参考成本约1.034。",
+  "recent_closes": [
+    {
+      "date": "2026-07-30",
+      "close": 1.065
+    },
+    {
+      "date": "2026-07-31",
+      "close": 1.063
+    },
+    {
+      "date": "2026-08-03",
+      "close": 1.064
+    }
+  ]
+}
