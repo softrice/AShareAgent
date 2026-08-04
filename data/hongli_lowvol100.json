@@ -1,0 +1,192 @@
+{
+  "generated_at": "2026-08-04 02:03:03",
+  "asof_session": "2026-08-04 盘中",
+  "theme": "红利低波100",
+  "decision_core_code": "159307",
+  "ai_backend": "cursor-only",
+  "note": "2026-08-04更新；总资金约400万，红利低波主题约214万（约53.5%），参考成本约1.034。",
+  "representatives": [
+    {
+      "code": "159307",
+      "name": "红利低波100ETF博时",
+      "latest_price": 1.053,
+      "pct_chg": -1.03,
+      "open": 1.062,
+      "high": 1.065,
+      "low": 1.05,
+      "prev_close": 1.064,
+      "iopv": 1.0533,
+      "discount_premium_pct": 0.03,
+      "amount": 25466526.6,
+      "main_net_inflow": -5724579.0,
+      "ma5": 1.0588,
+      "ma20": 1.0265,
+      "ma60": 1.0247,
+      "above_ma60": true,
+      "gap_to_ma60_pct": -2.68,
+      "rsi14": 62.42,
+      "kdj": {
+        "k": 76.61,
+        "d": 79.28,
+        "j": 71.26
+      },
+      "macd_signal": "柱为正（偏多动能）",
+      "macd": {
+        "dif": 0.01435,
+        "dea": 0.009772,
+        "hist": 0.004578,
+        "hist_prev": 0.005857
+      },
+      "boll": {
+        "mid": 1.02645,
+        "upper": 1.078355,
+        "lower": 0.974545,
+        "position": 0.755757,
+        "zone": "轨道内"
+      },
+      "recent_60d_high": 1.07,
+      "recent_60d_low": 0.949,
+      "ret_5d": 0.0164,
+      "ret_20d": 0.0734,
+      "hist_last_date": "2026-08-03",
+      "tech_note": "含2026-08-04临时K（完整日线止于2026-08-03）"
+    },
+    {
+      "code": "515100",
+      "name": "红利低波100ETF景顺",
+      "latest_price": 1.446,
+      "pct_chg": -1.16,
+      "open": 1.46,
+      "high": 1.462,
+      "low": 1.441,
+      "prev_close": 1.463,
+      "iopv": 1.4464,
+      "discount_premium_pct": 0.03,
+      "amount": 33599154.0,
+      "main_net_inflow": -2978068.0,
+      "ma5": 1.4562,
+      "ma20": 1.4088,
+      "ma60": 1.399,
+      "above_ma60": true,
+      "gap_to_ma60_pct": -3.25,
+      "rsi14": 62.15,
+      "kdj": {
+        "k": 77.89,
+        "d": 81.12,
+        "j": 71.44
+      },
+      "macd_signal": "柱为正（偏多动能）",
+      "macd": {
+        "dif": 0.021787,
+        "dea": 0.015569,
+        "hist": 0.006218,
+        "hist_prev": 0.008162
+      },
+      "boll": {
+        "mid": 1.4088,
+        "upper": 1.483446,
+        "lower": 1.334154,
+        "position": 0.749176,
+        "zone": "轨道内"
+      },
+      "recent_60d_high": 1.465,
+      "recent_60d_low": 1.299,
+      "ret_5d": 0.0147,
+      "ret_20d": 0.0735,
+      "hist_last_date": "2026-08-03",
+      "tech_note": "含2026-08-04临时K（完整日线止于2026-08-03）"
+    }
+  ],
+  "hongli100_peers": [
+    {
+      "code": "515100",
+      "name": "红利低波100ETF景顺",
+      "price": 1.446,
+      "pct_chg": -1.16,
+      "amount": 33599154.0,
+      "main_net_inflow": -2978068.0,
+      "premium": 0.03
+    },
+    {
+      "code": "159307",
+      "name": "红利低波100ETF博时",
+      "price": 1.053,
+      "pct_chg": -1.03,
+      "amount": 25466526.6,
+      "main_net_inflow": -5724579.0,
+      "premium": 0.03
+    },
+    {
+      "code": "560720",
+      "name": "红利低波100ETF工银",
+      "price": 1.008,
+      "pct_chg": -1.18,
+      "amount": 982343.0,
+      "main_net_inflow": -68707.0,
+      "premium": 0.28
+    },
+    {
+      "code": "515480",
+      "name": "红利低波100ETF南方",
+      "price": 1.09,
+      "pct_chg": -1.36,
+      "amount": 233388.0,
+      "main_net_inflow": 34729.0,
+      "premium": 0.16
+    },
+    {
+      "code": "560520",
+      "name": "红利低波100ETF大成",
+      "price": 1.122,
+      "pct_chg": -1.67,
+      "amount": 6083.0,
+      "main_net_inflow": -3499.0,
+      "premium": 0.54
+    }
+  ],
+  "market_env": {
+    "source": "sina_index_spot",
+    "asof": "2026-08-04 02:03:03",
+    "indices": [
+      {
+        "name": "上证指数",
+        "price": 3801.9286,
+        "pct_chg": -0.203
+      },
+      {
+        "name": "深证成指",
+        "price": 13660.748,
+        "pct_chg": 1.58
+      },
+      {
+        "name": "创业板指",
+        "price": 3403.58,
+        "pct_chg": 3.059
+      },
+      {
+        "name": "科创50",
+        "price": 1584.7661,
+        "pct_chg": 2.053
+      },
+      {
+        "name": "沪深300",
+        "price": 4563.6381,
+        "pct_chg": 0.45
+      }
+    ]
+  },
+  "northbound": {
+    "note": "数据缺失"
+  },
+  "position_context": {
+    "total_capital_approx": 4000000,
+    "hongli_position_approx": 2140000,
+    "hongli_pct_of_total": 53.5,
+    "ref_cost": 1.034,
+    "pnl_pct_vs_ref": 1.84
+  },
+  "compare_vs_0803": {
+    "159307_then": 1.064,
+    "action_then": "持有"
+  }
+}
