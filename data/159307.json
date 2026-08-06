@@ -1,0 +1,165 @@
+{
+  "code": "159307",
+  "generated_at": "2026-08-06 02:04:07",
+  "ai_backend": "cursor-only",
+  "basic": {
+    "name": "红利低波100ETF博时",
+    "price": 1.027,
+    "pct_chg": -0.58,
+    "open": 1.033,
+    "high": 1.035,
+    "low": 1.026,
+    "volume": 319269.0,
+    "amount": 32875151.8,
+    "discount_rate": -0.07,
+    "source": "akshare fund_etf_spot_em + fund_etf_hist_sina"
+  },
+  "technicals": {
+    "last_close": 1.027,
+    "ma5": 1.0466,
+    "ma20": 1.03055,
+    "ma60": 1.0233833333333335,
+    "ret_5d": -0.03568075117370895,
+    "ret_20d": 0.04689092762487257,
+    "volatility_20d": 0.1494604314715106,
+    "bias_ma20": -0.003444762505458443,
+    "macd": {
+      "dif": 0.010077820906386314,
+      "dea": 0.010126735530299427,
+      "hist": -4.891462391311274e-05,
+      "hist_prev": 0.0019155816986586704,
+      "signal": "死叉偏空"
+    },
+    "rsi14": 49.52168002572825,
+    "rsi14_zone": "中性区",
+    "boll": {
+      "mid": 1.03055,
+      "upper": 1.0735602802888633,
+      "lower": 0.987539719711137,
+      "position": 0.45873079672862027,
+      "zone": "轨道内"
+    },
+    "atr14": 0.016182577189817072,
+    "atr14_pct": 0.015757134556783906,
+    "kdj": {
+      "k": 40.076150655834425,
+      "d": 60.18807523584142,
+      "j": -0.14769850417955865
+    },
+    "ma_structure": "多头排列",
+    "_bars_used": "hist+intraday",
+    "_last_hist_date": "2026-08-05",
+    "above_ma60": true,
+    "dist_ma60_pct": 0.35
+  },
+  "fund_flow": {
+    "summary": {
+      "main_net": -6766015.0,
+      "main_net_pct": -20.58
+    }
+  },
+  "market_env": {
+    "source": "sina_index_spot",
+    "asof": "2026-08-06 02:04:07",
+    "indices": [
+      {
+        "name": "上证",
+        "price": 3883.7245,
+        "pct_chg": 0.137
+      },
+      {
+        "name": "深证",
+        "price": 14079.557,
+        "pct_chg": -0.457
+      },
+      {
+        "name": "沪深300",
+        "price": 4638.4321,
+        "pct_chg": -0.423
+      },
+      {
+        "name": "创业板",
+        "price": 3499.16,
+        "pct_chg": -1.018
+      },
+      {
+        "name": "科创50",
+        "price": 1686.9424,
+        "pct_chg": -0.397
+      },
+      {
+        "name": "中证500",
+        "price": 7803.7785,
+        "pct_chg": -0.07
+      },
+      {
+        "name": "红利指数",
+        "price": 3155.6005,
+        "pct_chg": 0.45
+      }
+    ]
+  },
+  "compare_515100": {
+    "price": 1.409,
+    "pct_chg": -0.63,
+    "technicals": {
+      "last_close": 1.409,
+      "ma20": 1.4145999999999999,
+      "ma60": 1.397616666666667,
+      "rsi14": 49.69880091599327,
+      "kdj": {
+        "k": 39.968867990353964,
+        "d": 61.088012311114895,
+        "j": -2.2694206511679056
+      },
+      "above_ma60": true,
+      "dist_ma60_pct": 0.81
+    },
+    "main_net": -3605833.0,
+    "discount_rate": 0.04
+  },
+  "style_etf": {
+    "沪深300ETF": {
+      "code": "510300",
+      "price": 4.692,
+      "pct": -0.47
+    },
+    "创业板ETF": {
+      "code": "159915",
+      "price": 3.521,
+      "pct": -1.1
+    },
+    "科创50ETF": {
+      "code": "588000",
+      "price": 1.78,
+      "pct": -0.34
+    },
+    "红利低波": {
+      "code": "512890",
+      "price": 1.157,
+      "pct": -0.6
+    }
+  },
+  "holding_context": {
+    "total_capital_wan": 400,
+    "theme_position_wan": 214,
+    "theme_pct": 0.535,
+    "ref_cost_159307": 1.034,
+    "pnl_vs_cost_pct": -0.68
+  },
+  "northbound": {
+    "error": "数据缺失"
+  },
+  "social": {
+    "error": "数据缺失"
+  },
+  "news": {
+    "error": "数据缺失"
+  },
+  "missing": [
+    "北向资金明细",
+    "公告全文",
+    "雪球/股吧社媒",
+    "成分股估值"
+  ]
+}
